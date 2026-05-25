@@ -25,6 +25,9 @@ body{
   align-items:center;
   background:#070b1b url('bgimage.png') center/cover fixed no-repeat;
 }
+@media(max-width:768px){
+  body{background-attachment:scroll}
+}
 
 /* ── Content ── */
 .content{
