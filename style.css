@@ -12,6 +12,7 @@
   --glow:#9f7aea;
   --text:rgba(255,255,255,0.9);
   --muted:rgba(255,255,255,0.5);
+  --warm-gold-deep: rgba(255, 210, 120, 0.75);
 }
 html,body{height:100%}
 body{
@@ -22,24 +23,13 @@ body{
   display:flex;
   flex-direction:column;
   align-items:center;
-  background:url('bgimage.png') center/cover fixed no-repeat;
-}
-
-/* ── Ark silhouette (bottom-right) ── */
-.ark-silhouette{
-  position:fixed;bottom:24px;right:24px;z-index:2;
-  pointer-events:none;
-  width:140px;height:auto;
-  opacity:0.85;
-}
-@media(max-width:500px){
-  .ark-silhouette{width:100px;bottom:16px;right:16px}
+  background:#070b1b url('bgimage.png') center/cover fixed no-repeat;
 }
 
 /* ── Content ── */
 .content{
   position:relative;z-index:1;
-  width:100%;max-width:560px;
+  width:100%;max-width:100%;
   padding:60px 24px 80px;
   display:flex;
   flex-direction:column;
@@ -49,33 +39,53 @@ body{
 header{text-align:center;margin-bottom:24px}
 header .label{
   font-family:'Inter',sans-serif;
-  font-size:11px;
+  font-size:12px;
+  font-weight:600;
   letter-spacing:4px;
   text-transform:uppercase;
   color:var(--muted);
-  margin-bottom:12px;
+  margin-bottom:8px;
 }
 header h1{
+  font-family:'Cinzel',serif;
   font-weight:500;
   font-size:clamp(2rem,7vw,3rem);
-  line-height:1.15;
-  letter-spacing:-0.02em;
-  background:linear-gradient(135deg,#fff 0%,var(--aurora1) 50%,var(--glow) 100%);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
+  line-height:1;
+  color:var(--muted);
+  /* background:linear-gradient(135deg,#fff 0%,var(--aurora1) 50%,var(--glow) 100%); */
+  /* -webkit-background-clip:text; */
+  /* -webkit-text-fill-color:transparent; */
+  /* background-clip:text; */
 }
 header .sub{
   font-size:clamp(0.75rem,2.5vw,0.9rem);
   font-style:italic;
+  font-weight:400;
   color:var(--muted);
   margin-top:8px;
   letter-spacing:0.5px;
+  transition:color 3s ease, text-shadow 3s ease;
+  cursor:default;
+}
+header .sub:hover{
+  color:#04b471;
+  text-shadow:
+    0 0 3px #04b471,
+    0 0 8px #04b471,
+    0 0 14px rgba(4,180,113,0.9),
+    0 0 21px rgba(41,155,116,0.75),
+    0 0 29px rgba(41,155,116,0.6),
+    0 0 38px rgba(41,113,73,0.45),
+    0 0 49px rgba(41,113,73,0.33),
+    0 0 62px rgba(4,76,34,0.22),
+    0 0 78px rgba(4,76,34,0.14),
+    0 0 98px rgba(6,44,25,0.09),
+    0 0 125px rgba(6,44,25,0.06);
 }
 .divider{
   width:60px;height:1px;
   background:linear-gradient(90deg,transparent,var(--aurora1),transparent);
-  margin:12px 0 20px;
+  margin:5px 0 5px;
 }
 
 /* ── Chapter list ── */

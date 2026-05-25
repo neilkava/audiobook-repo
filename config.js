@@ -2,9 +2,9 @@
 
 const CONFIG = {
   // Main title and subtitle
-  title: "Midnight Ark",
-  subtitle: "a story of finding shelter under the aurora",
-  label: "An Audiobook",
+  title: "the lantern sea",
+  subtitle: "a story of finding light beyond the fog",
+  label: "The Adventures of Nom and Pom",
 
   // Footer text
   footerLine1: "made with love",
@@ -13,10 +13,10 @@ const CONFIG = {
   // ── Chapter list ──
   // Edit titles, audio filenames, and durations (MM:SS placeholder shown before audio loads)
   chapters: [
-    { title: "The Horizon at Midnight",  file: "chapter1.mp3", dur: "0:00" },
-    { title: "Drifting Through the Dark", file: "chapter2.mp3", dur: "0:00" },
-    { title: "The Ark Appears",           file: "chapter3.mp3", dur: "0:00" },
-    { title: "Under the Auroral Sky",     file: "chapter4.mp3", dur: "0:00" },
-    { title: "Where We Belong",           file: "chapter5.mp3", dur: "0:00" },
+    { title: "Where the Stories Begin",  file: "chapter1.mp3", dur: "0:00" },
+    { title: "The Rainwood Trail", file: "chapter2.mp3", dur: "0:00" },
+    { title: "Black Water Crossing",           file: "chapter3.mp3", dur: "0:00" },
+    { title: "The Ark Beneath the Cliffs",     file: "chapter4.mp3", dur: "0:00" },
+    { title: "Where the Ocean Glowed",           file: "chapter5.mp3", dur: "0:00" },
   ],
 };
