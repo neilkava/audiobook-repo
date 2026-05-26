@@ -14,6 +14,18 @@ const progressTrack = document.getElementById('progressTrack');
 const currentTimeEl = document.getElementById('currentTime');
 const totalTimeEl   = document.getElementById('totalTime');
 
+// ── Reader ──
+const readerPanel      = document.getElementById('readerPanel');
+const readerBackdrop   = document.getElementById('readerBackdrop');
+const readerContent    = document.getElementById('readerContent');
+const readerTitle      = document.getElementById('readerTitle');
+const readerCollapseBtn = document.getElementById('readerCollapseBtn');
+const trackInfoText    = document.getElementById('trackInfoText');
+const trackExpandIcon  = document.getElementById('trackExpandIcon');
+
+let readerOpen = false;
+let readerTextCache = {};
+
 function formatTime(s){
   if(!s||!isFinite(s)) return '0:00';
   const m = Math.floor(s/60);
@@ -53,10 +65,11 @@ function loadChapter(i){
     const ind = el.querySelector('.play-indicator');
     if(ind) ind.innerHTML = (idx===i && isPlaying) ? '<svg width="16" height="16" viewBox="0 0 16 16"><rect x="2" y="1" width="4" height="14" rx="1.5" fill="currentColor"/><rect x="10" y="1" width="4" height="14" rx="1.5" fill="currentColor"/></svg>' : '<svg width="14" height="16" viewBox="0 0 14 16"><path d="M1.5 0L13.5 8L1.5 16Z" fill="currentColor"/></svg>';
   });
-  trackInfo.textContent = ch.title;
+  trackInfoText.textContent = ch.title;
   trackInfo.classList.add('active');
   isPlaying = true;
   audio.play().catch(()=>{isPlaying=false;updateUI();});
+  if (readerOpen) loadReaderText(i);
   updateUI();
 }
 
@@ -79,7 +92,7 @@ function updateUI(){
     if(ind) ind.innerHTML = (i===currentIndex && isPlaying) ? '<svg width="16" height="16" viewBox="0 0 16 16"><rect x="2" y="1" width="4" height="14" rx="1.5" fill="currentColor"/><rect x="10" y="1" width="4" height="14" rx="1.5" fill="currentColor"/></svg>' : '<svg width="14" height="16" viewBox="0 0 14 16"><path d="M1.5 0L13.5 8L1.5 16Z" fill="currentColor"/></svg>';
   });
   if(currentIndex>=0 && CONFIG.chapters[currentIndex]){
-    trackInfo.textContent = CONFIG.chapters[currentIndex].title;
+    trackInfoText.textContent = CONFIG.chapters[currentIndex].title;
   }
 }
 
@@ -145,6 +158,20 @@ document.addEventListener('keydown',(e)=>{
   }
 });
 
+// ── Reader events ──
+trackInfo.addEventListener('click', toggleReader);
+readerBackdrop.addEventListener('click', closeReader);
+readerCollapseBtn.addEventListener('click', closeReader);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && readerOpen) {
+    closeReader();
+  }
+  if ((e.code === 'Space' || e.key === ' ') && readerOpen && e.target?.closest?.('.reader-content,.reader-handle')) {
+    e.preventDefault();
+  }
+});
+
 // ── Preload chapter durations ──
 function preloadDurations(){
   CONFIG.chapters.forEach((ch,i)=>{
@@ -158,17 +185,69 @@ function preloadDurations(){
   });
 }
 
+// ── Reader ──
+
+function openReader() {
+  if (currentIndex < 0) return;
+  readerOpen = true;
+  readerPanel.classList.add('open');
+  readerBackdrop.classList.add('open');
+  document.body.classList.add('reader-open');
+  trackExpandIcon.classList.add('open');
+  loadReaderText(currentIndex);
+}
+
+function closeReader() {
+  readerOpen = false;
+  readerPanel.classList.remove('open');
+  readerBackdrop.classList.remove('open');
+  document.body.classList.remove('reader-open');
+  trackExpandIcon.classList.remove('open');
+}
+
+function toggleReader() {
+  if (readerOpen) closeReader();
+  else openReader();
+}
+
+async function loadReaderText(index) {
+  if (index < 0 || index >= CONFIG.chapters.length) return;
+  const ch = CONFIG.chapters[index];
+  readerTitle.textContent = ch.title;
+
+  if (readerTextCache[index]) {
+    readerContent.innerHTML = readerTextCache[index];
+    readerContent.scrollTop = 0;
+    return;
+  }
+
+  readerContent.innerHTML = '<p style="opacity:0.4">Loading…</p>';
+
+  try {
+    const res = await fetch(ch.textFile);
+    if (!res.ok) throw new Error('Not found');
+    const text = await res.text();
+    const html = text.split('\n\n').filter(p => p.trim()).map(p => '<p>' + p.replace(/\n/g, '<br>') + '</p>').join('');
+    readerTextCache[index] = html;
+    readerContent.innerHTML = html;
+  } catch {
+    readerContent.innerHTML = '<p style="opacity:0.4">Text not available for this chapter.</p>';
+  }
+  readerContent.scrollTop = 0;
+}
+
 // ── Play introduction ──
 
 function playIntro() {
+  closeReader();
   currentIndex = -1;
   isPlaying = true;
-  audio.src = 'davidatten.mp3';
+  audio.src = 'assets/audio/davidatten.mp3';
   audio.load();
   audio.play().catch(() => { isPlaying = false; updateUI(); });
   document.querySelectorAll('.chapter-btn').forEach(el => el.classList.remove('active'));
   updateUI();
-  trackInfo.textContent = 'Introduction';
+  trackInfoText.textContent = 'Introduction';
   trackInfo.classList.add('active');
 }
 

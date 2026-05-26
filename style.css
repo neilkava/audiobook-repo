@@ -23,7 +23,7 @@ body{
   display:flex;
   flex-direction:column;
   align-items:center;
-  background:#070b1b url('bgimage.png') center/cover fixed no-repeat;
+  background:#070b1b url('assets/images/bgimage.png') center/cover fixed no-repeat;
 }
 @media(max-width:768px){
   body{background-attachment:scroll}
@@ -158,6 +158,8 @@ header .sub:hover{
   color:var(--muted);
   min-height:1.2em;
   transition:opacity 0.3s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  cursor:pointer;
 }
 .player-bar .track-info.active{color:var(--text)}
 .player-bar .controls{
@@ -210,6 +212,63 @@ header .sub:hover{
   opacity:0;transition:opacity 0.2s;
 }
 .progress-track:hover .progress-fill::after{opacity:1}
+
+/* ── Reader Panel ── */
+.reader-backdrop{
+  position:fixed;inset:0;z-index:4;
+  background:rgba(0,0,0,0.45);
+  opacity:0;pointer-events:none;
+  transition:opacity 0.35s ease;
+}
+.reader-backdrop.open{opacity:1;pointer-events:auto}
+
+.reader-panel{
+  position:fixed;left:0;right:0;top:0;bottom:0;z-index:5;
+  background:var(--night);
+  transform:translateY(100%);
+  transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.reader-panel.open{transform:translateY(0)}
+
+.reader-handle{
+  display:flex;align-items:center;gap:12px;
+  padding:16px 20px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  flex-shrink:0;
+}
+.reader-handle button{
+  background:none;border:none;
+  color:var(--muted);cursor:pointer;
+  font-size:14px;padding:4px 8px;
+  border-radius:6px;transition:all 0.2s;
+}
+.reader-handle button:hover{
+  color:var(--text);background:rgba(255,255,255,0.06)
+}
+.reader-title{
+  font-family:'Cinzel',serif;
+  font-size:16px;color:var(--text);font-weight:500;
+}
+
+.reader-content{
+  flex:1;overflow-y:auto;
+  padding:24px 28px 140px;
+  font-size:17px;line-height:1.9;
+  color:var(--text);font-family:'Cormorant Garamond',serif;
+}
+.reader-content p{margin-bottom:1em}
+
+/* ── Track info expand ── */
+.track-expand-icon{
+  font-size:10px;opacity:0.4;
+  transition:transform 0.3s;
+}
+.track-expand-icon.open{transform:rotate(180deg)}
+
+/* ── Reader-open state ── */
+body.reader-open .content{opacity:0.15;pointer-events:none}
 
 /* ── Footer ── */
 footer{
