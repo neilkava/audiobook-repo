@@ -216,21 +216,30 @@ header .sub:hover{
 /* ── Reader Panel ── */
 .reader-backdrop{
   position:fixed;inset:0;z-index:4;
-  background:rgba(0,0,0,0.45);
+  background:rgba(0,0,0,0.65);
   opacity:0;pointer-events:none;
   transition:opacity 0.35s ease;
 }
 .reader-backdrop.open{opacity:1;pointer-events:auto}
 
 .reader-panel{
-  position:fixed;left:0;right:0;top:0;bottom:0;z-index:5;
-  background:var(--night);
-  transform:translateY(100%);
-  transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  position:fixed;z-index:5;
+  left:clamp(16px,4vw,40px);
+  right:clamp(16px,4vw,40px);
+  top:clamp(48px,7vh,80px);
+  bottom:clamp(130px,16vh,160px);
+  background:rgba(7,10,26,0.45);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:16px;
   display:flex;flex-direction:column;
   overflow:hidden;
+  opacity:0;pointer-events:none;
+  transform:translateY(24px) scale(0.98);
+  transition:opacity 0.25s ease, transform 0.35s cubic-bezier(0.4,0,0.2,1);
 }
-.reader-panel.open{transform:translateY(0)}
+.reader-panel.open{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
 
 .reader-handle{
   display:flex;align-items:center;gap:12px;
@@ -254,7 +263,7 @@ header .sub:hover{
 
 .reader-content{
   flex:1;overflow-y:auto;
-  padding:24px 28px 140px;
+  padding:20px 24px;
   font-size:17px;line-height:1.9;
   color:var(--text);font-family:'Cormorant Garamond',serif;
 }
@@ -268,7 +277,7 @@ header .sub:hover{
 .track-expand-icon.open{transform:rotate(180deg)}
 
 /* ── Reader-open state ── */
-body.reader-open .content{opacity:0.15;pointer-events:none}
+body.reader-open .content{pointer-events:none}
 
 /* ── Footer ── */
 footer{
