@@ -158,6 +158,20 @@ function preloadDurations(){
   });
 }
 
+// ── Play introduction ──
+
+function playIntro() {
+  currentIndex = -1;
+  isPlaying = true;
+  audio.src = 'davidatten.mp3';
+  audio.load();
+  audio.play().catch(() => { isPlaying = false; updateUI(); });
+  document.querySelectorAll('.chapter-btn').forEach(el => el.classList.remove('active'));
+  updateUI();
+  trackInfo.textContent = 'Introduction';
+  trackInfo.classList.add('active');
+}
+
 // ── Init ──
 
 renderChapters();
