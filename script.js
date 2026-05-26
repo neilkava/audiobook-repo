@@ -61,7 +61,7 @@ function loadChapter(i){
 }
 
 function togglePlay(){
-  if(currentIndex<0){loadChapter(0);return}
+  if(currentIndex<0 && !audio.src){loadChapter(0);return}
   if(audio.paused){
     isPlaying=true;
     audio.play().catch(()=>{});
