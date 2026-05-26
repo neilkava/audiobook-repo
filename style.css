@@ -15,6 +15,13 @@
   --warm-gold-deep: rgba(255, 210, 120, 0.75);
 }
 html,body{height:100%}
+
+/* ── Scrollbar ── */
+:root{scrollbar-width:thin;scrollbar-color:var(--aurora2) transparent}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--aurora2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--aurora1)}
 body{
   font-family:'Cormorant Garamond',serif;
   color:var(--text);
