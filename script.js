@@ -25,6 +25,7 @@ const trackExpandIcon  = document.getElementById('trackExpandIcon');
 
 let readerOpen = false;
 let readerTextCache = {};
+let currentReaderSegment = null;
 
 function formatTime(s){
   if(!s||!isFinite(s)) return '0:00';
@@ -117,7 +118,7 @@ audio.addEventListener('loadedmetadata',()=>{
     if(durEl) durEl.textContent = CONFIG.chapters[currentIndex].dur;
   }
 });
-audio.addEventListener('timeupdate',updateProgress);
+audio.addEventListener('timeupdate',()=>{updateProgress();syncReaderWithAudio()});
 audio.addEventListener('ended',()=>{
   isPlaying=false;
   updateUI();
@@ -172,6 +173,11 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+readerContent.addEventListener('click', (e) => {
+  const seg = e.target.closest('.segment');
+  if (seg && seg.dataset.start) audio.currentTime = parseFloat(seg.dataset.start);
+});
+
 // ── Preload chapter durations ──
 function preloadDurations(){
   CONFIG.chapters.forEach((ch,i)=>{
@@ -186,6 +192,28 @@ function preloadDurations(){
 }
 
 // ── Reader ──
+
+function syncReaderWithAudio() {
+  if (!readerOpen || currentIndex < 0) return;
+  const segments = readerContent.querySelectorAll('.segment');
+  if (!segments.length) return;
+  const t = audio.currentTime;
+  let activeEl = null;
+  for (const seg of segments) {
+    if (parseFloat(seg.dataset.start) <= t) activeEl = seg;
+    else break;
+  }
+  if (!activeEl || activeEl === currentReaderSegment) return;
+  segments.forEach(s => s.classList.remove('active'));
+  activeEl.classList.add('active');
+  currentReaderSegment = activeEl;
+  const cr = readerContent.getBoundingClientRect();
+  const er = activeEl.getBoundingClientRect();
+  if (er.top < cr.top || er.bottom > cr.bottom) {
+    const offset = er.top - cr.top + readerContent.scrollTop - cr.height / 2 + er.height / 2;
+    readerContent.scrollTop = offset;
+  }
+}
 
 function openReader() {
   if (currentIndex < 0) return;
@@ -217,7 +245,8 @@ async function loadReaderText(index) {
 
   if (readerTextCache[index]) {
     readerContent.innerHTML = readerTextCache[index];
-    readerContent.scrollTop = 0;
+    currentReaderSegment = null;
+    syncReaderWithAudio();
     return;
   }
 
@@ -227,9 +256,51 @@ async function loadReaderText(index) {
     const res = await fetch(ch.textFile);
     if (!res.ok) throw new Error('Not found');
     const text = await res.text();
-    const html = text.split('\n\n').filter(p => p.trim()).map(p => '<p>' + p.replace(/\n/g, '<br>') + '</p>').join('');
+    const lines = text.split('\n');
+    let html = '';
+    let segments = [];
+    let lastStart = 0;
+
+    function parseTimestamp(str) {
+      const m = str.match(/^\[(\d+):(\d+(?:\.\d+)?)\]\s*/);
+      if (!m) return null;
+      return { start: parseInt(m[1]) * 60 + parseFloat(m[2]), rest: str.slice(m[0].length) };
+    }
+
+    function flushParagraph() {
+      if (segments.length === 0) return;
+      html += '<p>';
+      for (const seg of segments) {
+        html += '<span class="segment" data-start="' + seg.start + '">' + seg.text + '</span> ';
+      }
+      html += '</p>';
+      segments = [];
+    }
+
+    for (const rawLine of lines) {
+      const line = rawLine.trimEnd();
+      if (line.trim() === '') {
+        flushParagraph();
+        continue;
+      }
+      const parsed = parseTimestamp(line);
+      if (parsed) {
+        lastStart = parsed.start;
+        segments.push({ start: parsed.start, text: parsed.rest });
+      } else {
+        if (segments.length > 0) {
+          segments[segments.length - 1].text += '<br>' + line;
+        } else {
+          segments.push({ start: lastStart, text: line });
+        }
+      }
+    }
+    flushParagraph();
+
     readerTextCache[index] = html;
     readerContent.innerHTML = html;
+    currentReaderSegment = null;
+    syncReaderWithAudio();
   } catch {
     readerContent.innerHTML = '<p style="opacity:0.4">Text not available for this chapter.</p>';
   }

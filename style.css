@@ -275,6 +275,8 @@ header .sub:hover{
   color:var(--text);font-family:'Cormorant Garamond',serif;
 }
 .reader-content p{margin-bottom:1em}
+.reader-content .segment{cursor:pointer;transition:color 0.25s}
+.reader-content .segment.active{color:var(--aurora1);text-shadow:0 0 12px rgba(79,209,197,0.25)}
 
 /* ── Track info expand ── */
 .track-expand-icon{
