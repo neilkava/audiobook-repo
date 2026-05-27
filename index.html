@@ -61,17 +61,6 @@
   </div>
 </div>
 
-<script src="config.js"></script>
-<script src="script.js"></script>
-<script>
-document.getElementById('pageLabel').textContent = CONFIG.label;
-document.getElementById('pageTitle').textContent = CONFIG.title;
-document.getElementById('pageSubtitle').textContent = CONFIG.subtitle;
-document.getElementById('footerLine1').textContent = CONFIG.footerLine1;
-document.getElementById('footerLine2').textContent = CONFIG.footerLine2;
-
-document.getElementById('pageTitle').addEventListener('click', playIntro);
-document.getElementById('pageLabel').addEventListener('click', playIntro);
-</script>
+<script type="module" src="app.js"></script>
 </body>
 </html>

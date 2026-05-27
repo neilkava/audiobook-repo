@@ -1,17 +1,11 @@
-// ── Edit your audiobook content here ──
-
-const CONFIG = {
-  // Main title and subtitle
+export const CONFIG = {
   title: "the lantern sea",
   subtitle: "a story of finding light beyond the fog",
   label: "The Adventures of Nom and Pom",
 
-  // Footer text
   footerLine1: "made with love",
   footerLine2: "for you, always",
 
-  // ── Chapter list ──
-  // Edit titles, audio filenames, and durations (MM:SS placeholder shown before audio loads)
   chapters: [
     { title: "Where the Stories Begin",  file: "assets/audio/chapter1.mp3", dur: "0:00", textFile: "assets/text/chapter1.txt" },
     { title: "The Rainwood Trail", file: "assets/audio/chapter2.mp3", dur: "0:00", textFile: "assets/text/chapter2.txt" },
