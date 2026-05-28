@@ -14,6 +14,8 @@ document.getElementById('pageTitle').textContent = CONFIG.title;
 document.getElementById('pageSubtitle').textContent = CONFIG.subtitle;
 document.getElementById('footerLine1').textContent = CONFIG.footerLine1;
 document.getElementById('footerLine2').textContent = CONFIG.footerLine2;
+document.getElementById('footerLine3').textContent = CONFIG.footerLine3;
+document.getElementById('footerLine4').textContent = CONFIG.footerLine4;
 
 audioEngine.init();
 playerBar.init();
