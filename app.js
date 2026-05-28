@@ -8,6 +8,7 @@ import * as scrubber from './modules/audioplayer/scrubber.js';
 import * as introPlayer from './modules/audioplayer/intro-player.js';
 import * as glow from './modules/ui/glow.js';
 import * as scrollbar from './modules/ui/scrollbar.js';
+import * as footerTrail from './modules/ui/footer-trail.js';
 
 document.getElementById('pageLabel').textContent = CONFIG.label;
 document.getElementById('pageTitle').textContent = CONFIG.title;
@@ -26,6 +27,7 @@ scrubber.init();
 introPlayer.init();
 glow.init();
 scrollbar.init();
+footerTrail.init();
 
 document.getElementById('prevBtn').addEventListener('click', () => audioEngine.prevChapter());
 document.getElementById('nextBtn').addEventListener('click', () => audioEngine.nextChapter());

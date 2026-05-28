@@ -298,3 +298,15 @@ footer{
   padding-bottom:50px;
 }
 footer span{opacity:0.5}
+
+/* ── Footer easter egg ── */
+.footer-particle{
+  position:fixed;pointer-events:none;
+  font-size:clamp(12px,2vw,20px);
+  z-index:999;
+  animation:footerFloat 1.4s ease-out forwards;
+}
+@keyframes footerFloat{
+  0%{opacity:1;transform:translateY(0) scale(1)}
+  100%{opacity:0;transform:translateY(-80px) scale(0.2)}
+}
